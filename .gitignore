@@ -1,10 +1,4 @@
-## .gitignore 
-
-# OS junk
-.DS_Store
-[Tt]humbs.db
-
-# test/temp files
-.*.swp
-test/
-
+data/
+data/*
+analysis/
+analysis/*
