@@ -4,4 +4,4 @@ Smik	Smik.fasta
 Skud	SkudZP.fasta
 Sarb	Sarb.fasta
 Suva	Suva.fasta
-Seub	Seub_wMito.fasta
+Seub	Seub.fasta
