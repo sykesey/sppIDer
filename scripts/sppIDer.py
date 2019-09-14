@@ -190,5 +190,8 @@ if args.delete:
    os.remove(workingDir + outputPrefix + ".sam")
    os.remove(workingDir + outputPrefix + ".sort.bam")
    os.remove(workingDir + outputPrefix + ".view.bam")
-   os.remove(workingDir + outputPrefix + "-d.bedgraph")
+   if(args.bed == True):
+       os.remove(workingDir + outputPrefix + "-d.bedgraph")
+   else:
+       os.remove(workingDir + outputPrefix + ".bedgraph")
 
