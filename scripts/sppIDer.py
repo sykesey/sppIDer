@@ -74,14 +74,18 @@ trackerOut.close()
 
 ########################## BWA ###########################
 bwaOutName = outputPrefix + ".sam"
-bwaOutFile = open(workingDir + bwaOutName, 'w')
-if args.r2:
-    print("Read1=" + read1Name + "\nRead2=" + read2Name)
-    subprocess.call(["bwa", "mem", "-t", numCores, refGen, read1Name, read2Name], stdout=bwaOutFile, cwd=workingDir)
+bwaOutFileName = workingDir + bwaOutName
+if (os.path.exists(bwaOutFileName)):
+    print("BWA already exists...")
 else:
-    print("Read1=" + read1Name)
-    subprocess.call(["bwa", "mem", "-t", numCores, refGen, read1Name], stdout=bwaOutFile, cwd=workingDir)
-bwaOutFile.close()
+    bwaOutFile = open(workingDir + bwaOutName, 'w')
+    if args.r2:
+        print("Read1=" + read1Name + "\nRead2=" + read2Name)
+        subprocess.call(["bwa", "mem", "-t", numCores, refGen, read1Name, read2Name], stdout=bwaOutFile, cwd=workingDir)
+    else:
+        print("Read1=" + read1Name)
+        subprocess.call(["bwa", "mem", "-t", numCores, refGen, read1Name], stdout=bwaOutFile, cwd=workingDir)
+    bwaOutFile.close()
 print("BWA complete")
 currentTime = time.time()-start
 elapsedTime = calcElapsedTime(currentTime)
@@ -93,10 +97,16 @@ trackerOut.close()
 ########################## samtools ###########################
 samViewOutQual = outputPrefix + ".view.bam"
 bamSortOut = outputPrefix + ".sort.bam"
-samViewQualFile = open(workingDir + samViewOutQual, 'w')
-subprocess.call(["samtools", "view", "-@", numCores, "-q", "3", "-bhSu", bwaOutName], stdout=samViewQualFile, cwd=workingDir)
-samViewQualFile.close()
-subprocess.call(["samtools", "sort", "-@", numCores, samViewOutQual, "-o", bamSortOut], cwd=workingDir)
+if (os.path.exists(samViewOutQual)):
+    print("View file already exists")
+else:
+    samViewQualFile = open(workingDir + samViewOutQual, 'w')
+    subprocess.call(["samtools", "view", "-@", numCores, "-q", "3", "-bhSu", bwaOutName], stdout=samViewQualFile, cwd=workingDir)
+    samViewQualFile.close()
+if (os.path.exists(bamSortOut)):
+    print("Sort file already exists")
+else:
+    subprocess.call(["samtools", "sort", "-@", numCores, samViewOutQual, "-o", bamSortOut], cwd=workingDir)
 print("SAMTOOLS complete")
 currentTime = time.time()-start
 elapsedTime = calcElapsedTime(currentTime)
